@@ -53,7 +53,9 @@ else:
 		print
 		print "<html>"
 		print "<body>"
-		print "<h1>"+ my_usern + ", you already registered.</h1>" 
+		print "<h1>"+ my_usern + ", you already registered.</h1>"
+		print "</body>"
+		print "</html>"
 	else:
 		#insert value to two tables
 		try:		

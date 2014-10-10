@@ -40,26 +40,41 @@ else:
 
 	import uuid
 	session = str(uuid.uuid4())
-	#insert value to two tables
-	try:		
-		c.execute('insert into favor values (?, ?, ?, ?);',(my_email, my_zc, my_occu, my_pref))
-		c.execute('insert into user values (?, ?, ?, ?);', (my_usern, my_pw, my_email, session))		
+	# to check if the username is already in the database
+	c.execute('select * from user where email = ?', (my_email,))
+	all_results = c.fetchall()
+	if len(all_results) > 0:
+		c.execute('update user set sessionID = ? where email = ?',(session, my_email))
 		conn.commit()
+		coo = Cookie.SimpleCookie()
+		coo['session'] = session
+		print "Content-type: text/html"
+		print coo
+		print
+		print "<html>"
+		print "<body>"
+		print "<h1>"+ my_usern + ", you already registered.</h1>" 
+	else:
+		#insert value to two tables
+		try:		
+			c.execute('insert into favor values (?, ?, ?, ?);',(my_email, my_zc, my_occu, my_pref))
+			c.execute('insert into user values (?, ?, ?, ?);', (my_usern, my_pw, my_email, session))		
+			conn.commit()
 
-	except sqlite3.IntegrityError:
-		pass
+		except sqlite3.IntegrityError:
+			pass
 	
-	coo = Cookie.SimpleCookie()
-	coo['session'] = session
+		coo = Cookie.SimpleCookie()
+		coo['session'] = session
 
-	print "Content-type: text/html"
-	print coo
-	print
-	print "<html>"
-	print "<body>"
-	print "<h1>Welcome "+ my_usern+"</h1>" 
+		print "Content-type: text/html"
+		print coo
+		print
+		print "<html>"
+		print "<body>"
+		print "<h1>Welcome "+ my_usern+"</h1>" 
 # ///////////////////////////////////////////////
 # /////		# print "<form action=/logout.py><input type='submit' value='logout'/></form>"
 # ///////////////////////////////////////////////
-	print "</body>"
-	print "</html>"
+		print "</body>"
+		print "</html>"

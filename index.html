@@ -3,13 +3,58 @@
 	<title> Watch movie </title>
 </head>
 <body>
+<p><img src = "logo.jpg" width = "50" height = "50"></p>
+<style type = "text/css">
+h1{
+	font-size:20pt;
+	font-family: arial;
+}
+p{
+	font-size: 20pt;
+	color: blue;
+	display:inline-block;
+}
+img{
+	border: 2px solid black;
+}
+form{
+	display: inline-block;
+}
+#a{
+	width: 10em; height: 13em;
+}
+#b{
+	width:10em; height:13em;
+}
+</style>
 <p>Welcome to "Discount or Popcorn"</p>
-<form action=/login.html>
-	<input type="submit" value="Login"/> 
+<br></br>
+<form action="cgi-bin/login.py">
+	<input type="submit" id = "a" value="Login"> 
 </form>
-<form action=/register.html>
-	<input type="submit" value="register"/>
+<form action="cgi-bin/register.py">
+	<input type="submit" id = "b" value="register">
 </form>
+<h1> New Movies Coming Soon ...</h1>
+<a href="http://jmao6.rochestercs.org/Hobbit.html">
+	<img src="hobbit-battle-five-armies.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Hunger Game.html">
+	<img src="Hunger-Game-Mockingjay.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Big.html">
+<img src="Big-Hero.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Transformer.html">
+<img src="transformer.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Train Dragons.html">
+<img src="train-dragon.jpg" width = "150" height = "170">
+</a>
 </p>
 </body>
 </html>

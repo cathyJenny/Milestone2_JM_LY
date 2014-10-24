@@ -22,61 +22,48 @@ if exist_cookie:
 		print "<html>"
 		print "<body>"
 		print "<h1>Welcome again "+ name +"</h1>" 
-# ///////////////////////////////////////////////
-# /////		# print "<form action=/logout.py><input type='submit' value='logout'/></form>"
-# ///////////////////////////////////////////////
+		#Log Out Button
+		print "<form action='logout.py'><input type='submit' value='Logout'/></form>"
 		print "</body>"
 		print "</html>"
 # cookie does not exist
 else:
-	#assign variables	
-	form = cgi.FieldStorage()
-	my_email = form['email'].value
-	my_usern = form['usrn'].value
-	my_pw = form['pw'].value
-	my_zc = form['zip'].value
-	my_occu = form['occ'].value
-	my_pref = form['preference'].value
+	print "Content-type: text/html"
+	print
+	print """
+	<html>
+	<head>
+	<title> Register </title>
+	</head>
+	<body>
 
-	import uuid
-	session = str(uuid.uuid4())
-	# to check if the username is already in the database
-	c.execute('select * from user where email = ?', (my_email,))
-	all_results = c.fetchall()
-	if len(all_results) > 0:
-		c.execute('update user set sessionID = ? where email = ?',(session, my_email))
-		conn.commit()
-		coo = Cookie.SimpleCookie()
-		coo['session'] = session
-		print "Content-type: text/html"
-		print coo
-		print
-		print "<html>"
-		print "<body>"
-		print "<h1>"+ my_usern + ", you already registered.</h1>"
-		print "</body>"
-		print "</html>"
-	else:
-		#insert value to two tables
-		try:		
-			c.execute('insert into favor values (?, ?, ?, ?);',(my_email, my_zc, my_occu, my_pref))
-			c.execute('insert into user values (?, ?, ?, ?);', (my_usern, my_pw, my_email, session))		
-			conn.commit()
-
-		except sqlite3.IntegrityError:
-			pass
-	
-		coo = Cookie.SimpleCookie()
-		coo['session'] = session
-
-		print "Content-type: text/html"
-		print coo
-		print
-		print "<html>"
-		print "<body>"
-		print "<h1>Welcome "+ my_usern+"</h1>" 
-# ///////////////////////////////////////////////
-# /////		# print "<form action=/logout.py><input type='submit' value='logout'/></form>"
-# ///////////////////////////////////////////////
-		print "</body>"
-		print "</html>"
+	<form method="POST" action="reg.py">
+	Username: 
+	<input name="usrn" type=text size=30 required>
+	<br></br>
+	Password:
+	<input name="pw" type="password" size=30 required>
+	<br></br>
+	E-mail:
+	<input name="email" type=text size=30 required>
+	<br></br>
+	Zip code:
+	<input name="zip" type=text size=30 required>
+	<br></br>
+	Occuaption:<br/>
+	<input  name="occ" type="radio" value="student" required> Student
+	<input  name="occ" type="radio" value="other" required> Other <br/>
+	<br/>
+	Preference:<br/>
+	<input  name="preference" type="radio" value="action"> Action <br/>
+	<input  name="preference" type="radio" value="advanture"> Advanture <br/>
+	<input  name="preference" type="radio" value="comedy"> Comedy <br/>
+	<input  name="preference" type="radio" value="docum"> Documentary <br/>
+	<input  name="preference" type="radio" value="fantacy"> Fantacy <br/>
+	<input  name="preference" type="radio" value="honor"> Horror <br/>
+	<input  name="preference" type="radio" value="romance"> Romance <br/>
+	<br></br>
+	<input type="submit"/><input type="reset"/>
+	</form>
+	</body>
+	</html> """

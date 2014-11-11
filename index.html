@@ -1,40 +1,501 @@
 <html>
 <head>
-	<title> Watch movie </title>
+	<title> Watch Movie </title>
+ <link rel="stylesheet" href="style.css">
+  
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
+<script type="text/javascript">
+
+//Functions
+//////////////////////////////////First Log In Function ///////////////////
+function myFunction()
+	{
+		document.cookie="cookie";
+	}
+	function myFunction2()
+	{
+		document.cookie="cookie;expires=Fri, 31 Dec 1994 23:59:59 GMT;"; 
+	}
+
+function FLogin()
+{
+	
+   $("#fileContent2").hide();
+   $("#Log").hide();
+   $("#Del").hide();
+   $("Regi").hide();
+   $("#fileContents").html ("<p>Enter your info to log in:</p>"+"<h2> Email:   <input name='email' type=text size=30 id='stuffInput'>"+"<br>"+"</br>"+"Password: <input name='pw' type='password' size=30 id='nameInput'></h2>"+"<button id='postStuffButton'>Login</button>");
+
+}
+/////////Delete
+function Delete()
+{
+	$("#Delete").click(function() {
+    $("#Rec").hide();
+  	$.ajax(
+    {
+      url: "cgi-bin/delete.py",
+              
+      type: "GET",
+            
+      dataType: "text",
+      success: function(dat) {
+      //delete confirmation message
+      $("#fileContents").html(dat);
+      //hide register button 
+      $("#Log").hide();
+      $("#Del").hide();
+      $("#Up").hide();
+      //cookie expired
+      myFunction2();
+      $("#Regi").show();
+      $("#Regi").click(function()
+        {
+        	FReg();
+        	$("#postStuffButton").click(function(){
+        		RegButton();
+       })
+      })
+  },
+});
+});
+}
+
+////////////Logout
+function Logout()
+{
+	$("#LogOut").click(function() {
+    $("#Rec").hide();
+  	$.ajax(
+   	{
+   	url: "cgi-bin/logout.py",
+              
+   	type: "GET",
+            
+   	dataType: "text",
+   	success: function(dat) {
+    	 //delete confirmation message
+    	$("#fileContents").html(dat);
+    	$("#Lo").show();
+    	$("#Lo").click(function(){
+    	$("#fileContent2").html("<p>Enter your info to log in:</p>"+"<h2> Email:   <input name='email' type=text size=30 id='stuffInput'>"+"<br>"+"</br>"+"Password: <input name='pw' type='password' size=30 id='nameInput'></h2>"+"<button id='postStuffButton'>Login</button>");
+    	$("#Lo").hide();
+    		$("#postStuffButton").click(function(){
+    			LogButton();
+
+    			$("#fileContent2").hide();	
+    		})
+        })
+    	$("#Regi").show();
+    	$("#Regi").click(function()
+        {
+        	FReg();
+        	$("#postStuffButton").click(function(){
+        	RegButton();
+        })
+        })
+    	$("#Log").hide();
+   		$("#Del").hide();
+      $("#Up").hide();
+   		myFunction2();
+   	 },
+   	});
+   	});
+}
+///////Cookie Existed
+function CooExisted()
+{    
+    $.ajax(
+    {
+      url: "cgi-bin/movie.py",
+
+      type:"GET",
+
+      dataType:"text",
+
+      success: function(dat) {
+      //movie info
+      // $("#Movie").html(dat);
+      //creating delete button 
+      $("#Up").html("<button id='update'>Update</button>");
+      $("#Up").click(function(){
+      UpButton();
+      });
+      $("#Log").html("<button id='LogOut'>Logout</button>");
+      $("#Del").html("<button id='Delete'>Delete</button>");
+      $("#Regi").hide();
+      Delete();
+      Logout();  
+},
+});
+}
+
+
+/////////////////Click Log button
+function LogButton()
+{
+	$.ajax(
+    {
+      url: "cgi-bin/log.py",
+          
+      type: "POST",
+          // grab data from the stuffInput text box
+      data: {
+              "email": $("#stuffInput").val(),
+              "password": $("#nameInput").val()
+                  
+            },
+      dataType: "text",
+      success: function(dat) {
+        //welcome message
+      myFunction();
+      var message=$.trim(dat)
+        
+      if(message == "wrong password. Try again.")
+      {
+      	myFunction2();
+      	$("#fileContents").html(dat);
+      	$("#Del").hide();
+      	$("#Log").hide();
+        $("#Up").hide();
+      	//log
+      	$("#Lo").show();
+    	$("#Lo").click(function(){
+		    $("#Lo").hide();
+        $("#fileContent2").html("<p>Enter your info to log in:</p>"+"<h2> Email:   <input name='email' type=text size=30 id='stuffInput'>"+"<br>"+"</br>"+"Password: <input name='pw' type='password' size=30 id='nameInput'></h2>"+"<button id='postStuffButton'>Login</button>");	
+    		$("#postStuffButton").click(function(){
+    			LogButton();
+    			$("#fileContent2").hide();	
+    		})
+        })
+      }
+      else if(message == "you are not registered yet. Do you want to register now?")
+      {
+        $("#Log").hide();
+        $("#Del").hide();
+        $("#Up").hide();
+        $("#fileContents").html(dat);
+        $("#Regi").show();
+        $("#Regi").click(function()
+        {
+        	FReg();
+        	$("#postStuffButton").click(function(){
+        	RegButton();
+        })
+        })
+      }
+      else
+      {
+      	$("#fileContents").html(dat);
+          //successfully logged in 
+          $("#Log").html("<button id='LogOut'>Logout</button>");
+          $("#Del").html("<button id='Delete'>Delete</button>");
+          $("#Regi").hide();
+          myFunction();
+          $("#Rec").html("<form method='GET' action='cgi-bin/Rec.py'><input type='submit' id='r' value='Reccomendation'> </input> </form>");
+          $("#Rec").show();
+          $("#Up").show();
+          //click update button 
+           $("#Up").click(function(){
+              UpButton();
+           }); 
+      }
+      Delete();
+      Logout();
+        //movie info
+        $.ajax(
+        {
+          url: "cgi-bin/movie.py",
+
+          type:"GET",
+
+           dataType:"text",
+
+           success: function(dat) {
+            // $("#Movie").html(dat); 
+            $("#Log").show();
+            $("#Del").show();              },
+
+        });
+      },
+    }); 
+}
+
+//////////////////////First Reg
+function FReg()
+{
+	$("#fileContents").html ("<p>Enter your info to Register:</p>"+"<h2>Username: <input name='usrn' id='aa' type=text size=30 required>"+"<br></br>"+"Password: <input name='pw' id='bb' type='password' size=30 required>"+"<br></br>"+"E-mail: <input name='email' id='c' type=text size=30 required>"+"<br></br>"+"Zip code: <input name='zip' id='d' type=text size=30 required>"+ "<br></br>"+ "Occuaption:</h2>"+ "<input  name='occ' id='e' type='radio' value='student' required> Student <input  name='occ' id='e' type='radio' value='other' required> Other "+"<br/> <br/>"+ "<h2>Preference :</h2>"+ "<input  name='preference'  type='radio' value='action'> Action"+ "<br/>"+"<input  name='preference' id='f' type='radio' value='advanture'> Advanture "+"<br/>"+"<input  name='preference' id='f' type='radio' value='comedy'> Comedy" +"<br/>"+"<input  name='preference' id='f' type='radio' value='docum'> Documentary"+ "<br/>"+"<input  name='preference' id='f' type='radio' value='fantacy'> Fantacy" + "<br/>" +"<input  name='preference' id='f' type='radio' value='honor'> Horror" + "<br/>"+"<input  name='preference' type='radio' id='f' value='romance'> Romance" + "<br/>"+"<br></br>"+"<button id='postStuffButton'>Register</button>");
+    $("#Regi").hide(); 
+    $("#Lo").hide(); 
+    $("#Del").hide();
+    $("#Log").hide();
+}
+
+///////////////////////////Click Update Button
+function UpButton()
+{
+  $("#fileContents").html ("<p>Enter your info to Update:</p>"+"<h2>Username: <input name='usrn' id='aa' type=text size=30 required>"+"<br></br>"+"Password: <input name='pw' id='bb' type='password' size=30 required>"+"<br></br>"+"Zip code: <input name='zip' id='d' type=text size=30 required>"+ "<br></br>"+ "Occuaption:</h2>"+ "<input  name='occ' id='e' type='radio' value='student' required> Student <input  name='occ' id='e' type='radio' value='other' required> Other "+"<br/> <br/>"+ "<h2>Preference :</h2>"+ "<input  name='preference'  type='radio' value='action'> Action"+ "<br/>"+"<input  name='preference' id='f' type='radio' value='advanture'> Advanture "+"<br/>"+"<input  name='preference' id='f' type='radio' value='comedy'> Comedy" +"<br/>"+"<input  name='preference' id='f' type='radio' value='docum'> Documentary"+ "<br/>"+"<input  name='preference' id='f' type='radio' value='fantacy'> Fantacy" + "<br/>" +"<input  name='preference' id='f' type='radio' value='honor'> Horror" + "<br/>"+"<input  name='preference' type='radio' id='f' value='romance'> Romance" + "<br/>"+"<br></br>"+"<button id='postStuffButton'>Update</button>");
+    $("#Regi").hide(); 
+    $("#Lo").hide(); 
+    $("#Up").hide();
+    $("#postStuffButton").click(function () {
+      $.ajax(
+        {
+          url: "cgi-bin/update.py",
+        
+          type: "POST",
+        
+          data: {
+                "usrn": $("#aa").val(),
+                "pw": $("#bb").val(),
+                "zip": $("#d").val(),
+                "occ": $("input[type='radio'][name='occ']:checked").val(),
+                "preference": $("input[type='radio'][name='preference']:checked").val()  
+              },
+        
+         dataType: "text",
+         success: function(dat) {
+         //welcome message
+         $("#fileContents").html(dat); 
+         $("#Log").html("<button id='LogOut'>Logout</button>");
+         $("#Del").html("<button id='Delete'>Delete</button>");
+         //successfully updated 
+         $.ajax(
+          {
+            url: "cgi-bin/movie.py",
+
+            type:"GET",
+
+            dataType:"text",
+
+             success: function(dat) { 
+              $("#Log").show();
+              $("#Del").show();
+              $("#Lo").hide();
+              myFunction();
+              $("#Rec").html("<form method='GET' action='cgi-bin/Rec.py'><input type='submit' id = 'r' value='Reccomendation'> </input> </form>");  
+              $("#Rec").show();
+            },
+
+          }); 
+        
+          Delete();
+          
+          Logout();
+
+        },
+    });
+});
+}
+
+///////////////////////////Click Reg BUTTON
+function RegButton()
+{
+	$.ajax(
+      {
+        url: "cgi-bin/reg.py",
+        
+        type: "POST",
+        
+        data: {
+                "usrn": $("#aa").val(),
+                "pw": $("#bb").val(),
+                "email": $("#c").val(),
+                "zip": $("#d").val(),
+                "occ": $("input[type='radio'][name='occ']:checked").val(),
+                "preference": $("input[type='radio'][name='preference']:checked").val()  
+              },
+        
+        dataType: "text",
+        success: function(dat) {
+         //welcome message
+         $("#fileContents").html(dat); 
+         $("#Log").html("<button id='LogOut'>Logout</button>");
+         $("#Del").html("<button id='Delete'>Delete</button>");
+         //successfully registered 
+         $.ajax(
+          {
+            url: "cgi-bin/movie.py",
+
+            type:"GET",
+
+            dataType:"text",
+
+             success: function(dat) { 
+              $("#Log").show();
+              $("#Del").show();
+              $("#Rec").html("<form method='GET' action='cgi-bin/Rec.py'><input type='submit' id='r' value='Reccomendation'> </input> </form>");  
+              $("#Lo").hide();
+              myFunction();
+              $("#Rec").show();
+              $("#Up").show();
+              $("#Up").click(function(){
+                  UpButton();
+               });
+            },
+
+          }); 
+        
+          Delete();
+          
+          Logout();
+
+        },
+    });
+}
+$(document).ready(function() {
+//Login
+$("#Lo").html("<button id='Logg'>Login</button>");
+$("#Regi").html("<button id='Reg'>Register</button>");
+
+if(document.cookie.length==0)
+{
+  $("#Lo").click(function(){
+    $("#Lo").hide();
+    $("#Regi").hide();
+    $.ajax(
+    {
+      url: "cgi-bin/LOGIN.py",
+
+      type: "GET",
+
+      dataType: "text",
+
+      success: function(dat)
+      {
+      	var result=$.trim(dat);
+		  if(result=="Cookie")
+    	{
+         	FLogin();
+       }
+      
+    else
+      {
+        $("#fileContents").html(dat);
+        cooExisted();
+        $("#Up").html("<button id='update'>Update</button>");
+
+        $("#Up").click(function () {
+     
+        UpButton();
+        
+       });
+      }
+      	$("#postStuffButton").click(function () {
+     
+      		LogButton();
+
+          $("#Up").html("<button id='update'>Update</button>");
+
+          $("#Up").click(function () {
+     
+          UpButton();
+        
+       });
+        });
+      },
+       //click login ends
+  });
+ });
+    //Register   
+    //register button 
+    $("#Regi").html("<button id='Reg'>Register</button>")
+
+    $("#Regi").click(function() {
+      $("#fileContent2").html("<p>Enter your info to log in:</p>"+"<h2> Email:   <input name='email' type=text size=30 id='stuffInput'>"+"<br>"+"</br>"+"Password: <input name='pw' type='password' size=30 id='nameInput'></h2>"+"<button id='postStuffButton'>Login</button>");
+      $("#fileContent2").hide();
+      ////////////////////////////////////////////Register////
+      $.ajax(
+      {
+        url: "cgi-bin/register.py",
+
+        type: "GET",
+
+        dataType: "text",
+
+        success: function(dat){
+        var result=$.trim(dat);
+        ////////////////first time register
+        if(result=="Cookie")
+        {
+          FReg();
+        }
+      
+      	$("#postStuffButton").click(function() {
+      	RegButton();
+    });
+
+   },
+      });    
+  });
+}
+////////////////////////////////HTTP cookie
+else
+{
+	$.ajax(
+    {
+      url: "cgi-bin/LOGIN.py",
+
+      type: "GET",
+
+      dataType: "text",
+
+      success: function(dat){
+		  $("#fileContents").html(dat);
+		  $("#Lo").hide();
+		  $("#Regi").hide();
+		  CooExisted();
+      $("#Rec").html("<form method='GET' action='cgi-bin/Rec.py'><input type='submit' id='r' value='Reccomendation'> </input> </form>");  
+
+},
+});
+
+}
+});
+</script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+  $("#Name").val(sessionStorage['na']);
+  $("#comment").val(sessionStorage['c']);
+
+  $("#comment").on('input', function(){
+    sessionStorage['c']=$("#comment").val();
+    
+  })
+
+  $("#Name").on('input', function(){
+    sessionStorage['na']=$("#Name").val();
+  })
+
+  $("#sub").click(function() {
+    // console.log($("comment").val());
+    var n=$("#comment").val();
+    var value=$("#Name").val();
+    sessionStorage[value]=n;
+    $("#co").append(value+" just comment: "+n);
+  });
+
+});
+</script>
+
 </head>
 <body>
-<p><img src = "logo.jpg" width = "50" height = "50"></p>
-<style type = "text/css">
-h1{
-	font-size:20pt;
-	font-family: arial;
-}
-p{
-	font-size: 20pt;
-	color: blue;
-	display:inline-block;
-}
-img{
-	border: 2px solid black;
-}
-form{
-	display: inline-block;
-}
-#a{
-	width: 10em; height: 13em;
-}
-#b{
-	width:10em; height:13em;
-}
-</style>
-<p>Welcome to "Discount or Popcorn"</p>
-<br></br>
-<form action="cgi-bin/login.py">
-	<input type="submit" id = "a" value="Login"> 
-</form>
-<form action="cgi-bin/register.py">
-	<input type="submit" id = "b" value="register">
-</form>
+<pre id="fileContents"></pre> 
+<pre id="fileContent2"></pre>
+<pre id="Lo"></pre>
+<pre id="Rec"></pre>
+<pre id="Fa"></pre>
+<pre id="Regi"></pre> 
+<pre id="Up"></pre> 
+<pre id="Del"></pre>  
+<pre id="Log"></pre>
+<pre id="Movie"></pre>
+
+
+<p><img src = "logo.jpg" width = "50" height = "50"></p><p>Welcome to "Discount or Popcorn"</p>
 <h1> New Movies Coming Soon ...</h1>
 <a href="http://jmao6.rochestercs.org/Hobbit.html">
 	<img src="hobbit-battle-five-armies.jpg" width = "150" height = "170">
@@ -55,6 +516,11 @@ form{
 <a href="http://jmao6.rochestercs.org/Train Dragons.html">
 <img src="train-dragon.jpg" width = "150" height = "170">
 </a>
-</p>
+<br/>
+<br>Your Name: </br><input id='Name'></input> <br />
+<br>Write your Comment:</br><textarea id='comment'></textarea><br />
+<button id="sub">Submit</button> 
+
+  <div id="co"></div>
 </body>
 </html>

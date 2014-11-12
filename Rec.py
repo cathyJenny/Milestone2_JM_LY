@@ -100,3 +100,9 @@ if exist_cookie:
 	 		print "Content-type: text/html"
 			print
 	 		movieType(back_pre)
+	 		print """
+	 		<html>
+	 		<body>
+	 		<form method='GET' action='http://jmao6.rochestercs.org/index.html'><input type='submit' id='Home' value='HomePage'></input> </form>
+	 		</body>
+	 		</html>"""

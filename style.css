@@ -1,0 +1,54 @@
+<style type = "text/css">
+h1{
+	font-size:20pt;
+	font-family: arial;
+}
+h2{
+	font-size:10pt;
+}
+p{
+	font-size: 15pt;
+	color: blue;
+	display:inline-block;
+}
+img{
+	border: 2px solid black;
+}
+form{
+	display: inline-block;
+}
+#a{
+	width: 10em; height: 13em;
+}
+#b{
+	width:10em; height:13em;
+}
+#postStuffButton{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+#Logg{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+#Delete{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+#LogOut{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+#Reg{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+#r{
+	width: 9em; height: 2em;
+	background-color: white;
+}
+#update{
+	width: 6em; height: 2em;
+	background-color: white;
+}
+</style>

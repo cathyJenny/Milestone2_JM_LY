@@ -1,0 +1,206 @@
+<html>
+<head>
+	<title>The Imitation Game</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<p><img src = "/logo.jpg" width = "50" height = "50"></p>
+<p>Welcome to "Discount or Popcorn"</p>
+<form method='GET' action='http://jmao6.rochestercs.org/index.html'><input type='submit' id='Home' value='Back To HomePage'></input></form>
+<br></br>
+
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<h1> The Imitation Game</h1>
+<img src="/Imi.jpg" style="float:left;" width = "450" height = "500">
+
+<h3>Release Date</h3>
+<h4>Nov 28, 2014</h4>
+<h3>Genres: </h3>
+<h4>Action,Comedy</h2>
+<h3>Director</h3>
+<h4>Morten Tyldum</h4>
+<h3>Cast:</h3>
+<h4>Benedict Cumberbatch, Keira Knightley, Allen Leech, Rory Kinnear, Mark Strong.</h4>
+<h3> Description </h3>
+<h4>Benedict Cumberbatch stars as Alan Turing, the genius British mathematician, logician, cryptologist and computer scientist who led the charge to crack the German Enigma Code that helped the Allies win WWII. Turing went on to assist with the development of computers at the University of Manchester after the war, but was prosecuted by the UK government in 1952 for homosexual acts which the country deemed illegal.</h4><br/>
+<h1>Movie Trailer:</h1>
+<video width="400" Height="200" controls>
+  <source src="Imia.mov" type="video/mp4">
+</video>
+
+<h1>Choose The Cinema You Prefer To Go:</h1>
+<select  style="float:left;" id="zip" name="cinema" size="5">
+  <option id="z1" name="cinema" value="Albany">Albany</option>
+  <option id="z1" name="cinema" value="Buffalo">Buffalo</option>
+  <option id="z1" name="cinema" value="New York City">New York City</option>
+  <option id="z1" name="cinema" value="Rochester">Rochester</option>
+  <option id="z1" name="cinema" value="Syracuse">Syracuse</option> 
+</select>
+<pre id="cin"></pre>
+<pre id="add"></pre>
+<pre id="check"></pre>
+<pre id="comment"></pre>
+<pre id="but"></pre>
+<pre id="date"></pre>
+<script type="text/javascript">
+function address()
+{
+	$.ajax(
+		{
+			url: "cgi-bin/address.py",
+              
+     			type: "POST",
+            		
+            data:{
+            	"name": $("input[type='radio'][name='cinema']:checked").val()},
+
+      		dataType: "text",
+
+      		success: function(dat) 
+      		{
+      			$("#add").html("<h1>Address: "+dat+"</h1>");	
+      			$("#check").html("<button id='postButton' value='checkcom'>check comment");
+      			var Cinema = $("input[type='radio'][name='cinema']:checked").val();
+      			$("#postButton").click(function(){
+      				check(Cinema);
+      			});
+      		},
+});
+}
+function check(Cinema)
+{
+	$.ajax(
+	{
+		url: "cgi-bin/checkComment.py",
+              
+     	type: "POST",
+            		
+        data:{
+            "name": Cinema,
+        },
+
+      	dataType: "text",
+
+      	success: function(dat) 
+      	{
+      		$("#comment").html(dat);	
+      	},
+});
+}
+function date()
+{
+	$("#but").html("<button id='postButton0' value='Sunday'>Sunday"+
+			"<button id='postButton1' value='Monday'>Monday"+
+			"<button id='postButton2' value='Tuesday'>Tuesday"+
+			"<button id='postButton3' value='Wednesday'>Wednesday"+
+			"<button id='postButton4' value='Thursday'>Thursday"+
+			"<button id='postButton5' value='Friday'>Firday"+
+			"<button id='postButton6' value='Saturday'>Saturday");
+	$("#postButton0").click(function () {
+		date2("Sunday");	
+	});
+	$("#postButton1").click(function () {
+		date2("Monday");	
+	});
+	$("#postButton2").click(function () {
+		date2("Tuesday");	
+	});
+	$("#postButton3").click(function () {
+		date2("Wednesday");	
+	});
+	$("#postButton4").click(function () {
+		date2("Thursday");	
+	});
+	$("#postButton5").click(function () {
+		date2("Friday");	
+	});
+	$("#postButton6").click(function () {
+		date2("Saturday");	
+	});
+}
+function date2(a)
+{
+	$.ajax(
+		{
+			url: "cgi-bin/date.py",
+              
+     		type: "POST",
+            		
+            data:{
+            	"name": $("input[type='radio'][name='cinema']:checked").val(),
+            	"date": a,
+            	"movie": "Hobbit: The Battle of the Five Armies",
+            },
+
+      		dataType: "text",
+
+      		success: function(dat) 
+      		{
+      			$("#date").html(dat);	
+      		},
+});
+}
+$(document).ready(function() {	
+	$("#zip").click(function () {
+		var value=$("#zip").val();
+		if(value=="Albany")
+		{
+			$("#cin").html(
+			"<input id='z' name='cinema' type='radio' value='Regal Stadium 13 & RPX'>Regal Stadium 13 & RPX        "
+			+"<input id='z' name='cinema' type='radio' value='Regal Stadium 18 & iMax '>Regal Stadium 18 & iMax      "
+			+"<input id='z' name='cinema' type='radio' value='Regal E.Green Bush'>Regal E.Green Bush")
+			$("input[name='cinema']").click(function () {
+				address();
+				date();				
+			});
+		}
+		if(value=="Buffalo")
+		{
+			$("#cin").html(
+			"<input id='z' name='cinema' type='radio' value='Regal Elmwood Center 16'>Regal Elmwood Center 16    "
+			+"<input id='z' name='cinema' type='radio' value='North Park Art Cinema'>North Park Art Cinema     "
+			+"<input id='z' name='cinema' type='radio' value='Dipson Amherst Theater'>Dipson Amherst Theater")
+			$("input[name='cinema']").click(function () {
+				address();
+				date();
+			});
+		}
+		if(value=="New York City")
+		{
+			$("#cin").html(
+			"<input id='z' name='cinema' type='radio' value='AMC 84 Street 6'>AMC 84 Street 6     "
+			+"<input id='z' name='cinema' type='radio' value='UA Court Street 12 & RPX'>UA Court Street 12 & RPX    "+
+			"<input id='z' name='cinema' type='radio' value='AMC Loews Fresh Middles 7'>AMC Loews Fresh Middles 7")
+			$("input[name='cinema']").click(function () {
+				address();
+				date();
+			});
+		}
+		if(value=="Rochester")
+		{
+			$("#cin").html(
+			"<input id='z' name='cinema' type='radio' value='Stadium Movie 18'>Stadium Movie 18    "+
+			"<input id='z' name='cinema' type='radio' value='Pittsford'>Pittsford Cinema 9    "+
+			"<input id='z' name='cinema' type='radio' value='Cinema Theater Rochester'>Cinema Theater Rochester")
+			$("input[name='cinema']").click(function () {
+				address();
+				date();
+			});
+		}
+		if(value=="Syracuse")
+		{
+			$("#cin").html(
+			"<input id='z' name='cinema' type='radio' value='Regal Stadium 19 iMax'>Regal Stadium 19 iMax      "
+			+"<input id='z' name='cinema' type='radio' value='Regal Stadium 14'>Regal Stadium 14     "+
+			"<input id='z' name='cinema' type='radio' value='Bristol OmniTheater'>Bristol OmniTheater")
+			$("input[name='cinema']").click(function () {
+				address();
+				date();
+			});
+		}
+ }); 
+});
+</script>
+</p>
+</body>
+</html>

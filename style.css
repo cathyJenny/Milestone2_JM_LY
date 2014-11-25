@@ -51,4 +51,33 @@ form{
 	width: 6em; height: 2em;
 	background-color: white;
 }
+
+h3{
+	font-size:15pt;
+	font-family: arial;
+	margin-left: 500px;
+}
+
+h4
+{
+	margin-left: 500px;
+}
+h5
+{
+	font-size:20pt;
+	font-family: arial;
+}
+h6
+{
+	font-size:15pt;
+}
+select 
+{
+	font-size:10pt;
+	font-family: arial;
+}
+#postButton{
+	width: 10em; height: 3em;
+	background-color: white;
+}
 </style>

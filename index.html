@@ -456,29 +456,87 @@ else
 </script>
 
 <script type="text/javascript">
-
-$(document).ready(function() {
-  $("#Name").val(sessionStorage['na']);
-  $("#comment").val(sessionStorage['c']);
-
-  $("#comment").on('input', function(){
-    sessionStorage['c']=$("#comment").val();
-    
-  })
-
-  $("#Name").on('input', function(){
-    sessionStorage['na']=$("#Name").val();
-  })
-
-  $("#sub").click(function() {
-    // console.log($("comment").val());
-    var n=$("#comment").val();
-    var value=$("#Name").val();
-    sessionStorage[value]=n;
-    $("#co").append(value+" just comment: "+n);
+// dropdown list
+  function setOptions(chosen){
+    var selbox = document.commentarea.cinema;
+    selbox.length = 0;
+    if(chosen == " "){
+      selbox.options[selbox.options.length]=new Option('please select a city first','');
+    }
+    if(chosen == "1"){
+      selbox.options[selbox.options.length]=new Option('Regal Stadium 13 & RPX','Regal Stadium 13 & RPX');
+      selbox.options[selbox.options.length]=new Option('Regal Stadium 18 & iMax ','Regal Stadium 18 & iMax ');
+      selbox.options[selbox.options.length]=new Option('Regal E.Green Bush','Regal E.Green Bush');
+    }
+    if(chosen == "2"){
+      selbox.options[selbox.options.length]=new Option('Regal Elmwood Center 16','Regal Elmwood Center 16');
+      selbox.options[selbox.options.length]=new Option('North Park Art Cinema','North Park Art Cinema');
+      selbox.options[selbox.options.length]=new Option('Dipson Amherst Theater','Dipson Amherst Theater');
+    }
+    if(chosen == "3"){
+      selbox.options[selbox.options.length]=new Option('AMC 84 Street 6','AMC 84 Street 6');
+      selbox.options[selbox.options.length]=new Option('UA Court Street 12 & RPX','UA Court Street 12 & RPX');
+      selbox.options[selbox.options.length]=new Option('AMC Loews Fresh Middles 7','AMC Loews Fresh Middles 7');
+    }
+    if(chosen == "4"){
+      selbox.options[selbox.options.length]=new Option('Stadium Movie 18','Stadium Movie 18');
+      selbox.options[selbox.options.length]=new Option('Pittsford Cinema 9','Pittsford');
+      selbox.options[selbox.options.length]=new Option('Cinema Theater Rochester','Cinema Theater Rochester');
+    }
+    if(chosen == "5"){
+      selbox.options[selbox.options.length]=new Option('Regal Stadium 19 iMax','Regal Stadium 19 iMax');
+      selbox.options[selbox.options.length]=new Option('Regal Stadium 14','Regal Stadium 14');
+      selbox.options[selbox.options.length]=new Option('Bristol OmniTheater','Bristol OmniTheater');
+    }
+    var nname;
+    var ncity;
+    var cityname;
+    $("#searchCinema").click(function() {
+      nname=document.commentarea.cinema.options[document.commentarea.cinema.selectedIndex].value;
+      ncity=document.commentarea.city.options[document.commentarea.city.selectedIndex].value;
+      $("#Movie").html(nname);
+      if(ncity == "1")
+      {
+          cityname = "Albany";
+      }
+      if(ncity == "2")
+      {
+          cityname = "Buffalo";
+      }
+      if(ncity == "3")
+      {
+          cityname = "New York City";
+      }
+      if(ncity == "4")
+      {
+          cityname = "Rochester";
+      }
+      if(ncity == "5")
+      {
+          cityname = "Syracuse";
+      }
   });
+    $("#sub").click(function() {
+        var na=$("#Name").val();
+        var co=$("#comment").val()
+        $.ajax(
+        {
+          url:"cgi-bin/comment.py",
+          type: "POST",
+          data:{
+              "NickName":na,
+              "theater":nname,
+              "city":cityname,
+              "comment":co
+            },
+          dataType: "text",
+          success: function(dat){
+          $("#comments").html(dat);
+          },
+        });
+  });
+  }
 
-});
 </script>
 
 </head>
@@ -516,11 +574,67 @@ $(document).ready(function() {
 <a href="http://jmao6.rochestercs.org/Train Dragons.html">
 <img src="train-dragon.jpg" width = "150" height = "170">
 </a>
-<br/>
-<br>Your Name: </br><input id='Name'></input> <br />
-<br>Write your Comment:</br><textarea id='comment'></textarea><br />
-<button id="sub">Submit</button> 
 
-  <div id="co"></div>
+<a href="http://jmao6.rochestercs.org/ImitationGame.html">
+<img src="imiposter.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Gambler.html">
+<img src="Gambler.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Dumb.html">
+<img src="Dumb.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Kings.html">
+<img src="King.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Annie.html">
+<img src="Annie.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Night.html">
+<img src="Night.jpg" width = "150" height = "170">
+</a>
+
+<a href="http://jmao6.rochestercs.org/Ame.html">
+<img src="Ame.jpg" width = "150" height = "170">
+</a>
+
+<br/>
+<br>Your Name:</br><input id='Name'></input><br/>
+<!-- <div id="commentarea" class="comment-area-stuff">
+  <h1>choose the cinema you want to comment on</h1>
+  <select class="step1" name="city">
+    <option value="">city</option>
+  </select>
+  <select class="step2" name="cinema">
+    <option value="">cinema</option>
+  </select>
+</div> -->
+<br/>
+<div>
+<form name="commentarea">
+  <select name="city" size="1"
+  onchange="setOptions(document.commentarea.city.options[document.commentarea.city.selectedIndex].value);">
+  <option value=" " selected="selected">select a city</option>
+  <option value="1">Albany</option>
+  <option value="2">Buffalo</option>
+  <option value="3">New York City</option>
+  <option value="4">Rochester</option>
+  <option value="5">Syracuse</option>
+</select>
+<select name="cinema" size="1">
+  <option value="" selected="selected">select a cinema</option>
+</select>
+<input id="searchCinema" type="button" name="go" value="Select">
+</div></form>
+
+<br>Write your Comment:&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><textarea rows="5" cols="40" id='comment'></textarea>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;</br>
+<button id="sub">Submit</button> 
+<div id="co"></div>
+<div id="comments"></div>
 </body>
 </html>

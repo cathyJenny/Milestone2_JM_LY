@@ -69,6 +69,76 @@ def checkMovie(back_name):
 		</a>
 		</body>
 		</html>"""
+	if(back_name == "ImitationGame.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/ImitationGame.html">
+		<img src="/imiposter.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Gambler.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Gambler.html">
+		<img src="/Gambler.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Dumb.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Dumb.html">
+		<img src="/Dumb.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Kings.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Kings.html">
+		<img src="/King.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Annie.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Annie.html">
+		<img src="/Annie.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Night.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Night.html">
+		<img src="/Night.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
+	if(back_name == "Ame.html"):
+		print
+		print """ 
+		<html>
+		<body>
+		<a href="http://jmao6.rochestercs.org/Ame.html">
+		<img src="/Am.jpg" width = "150" height = "170">
+		</a>
+		</body>
+		</html>"""
 
 def movieType(back_pre):
 	c.execute('select * from movie where type= ?', (back_pre,))
